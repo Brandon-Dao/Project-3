@@ -47,36 +47,142 @@ public class GentlyDownTheStream {
         return sortedFruitsWithFilter(fruit -> !fruit.startsWith("A"));
     }
 
-    // TODO - return a list with the first 2 elements of a sorted list of fruits
+    // - return a list with the first 2 elements of a sorted list of fruits -- done
     // Add proper validation and exception handling
-    public List<String> sortedFruitsFirstTwo() throws InvalidDataException {
-        // Implement with validation, null checks, and exception handling
-        return null;
+    public List<String> sortedFruitsFirstTwo(List<String> fruits) throws InvalidDataException {
+        // Validate input
+        if (fruits == null) {
+            throw new InvalidDataException("Fruits list cannot be null");
+        }
+
+        // Filter out invalid entries
+        List<String> validFruits = fruits.stream()
+                .filter(Objects::nonNull)
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .collect(Collectors.toList());
+
+        // Validate we have data after filtering
+        if (validFruits.isEmpty()) {
+            throw new InvalidDataException("No valid fruit entries found");
+        }
+
+        // Sort and return first two (or fewer if less than 2 valid entries)
+        return validFruits.stream()
+                .sorted(String.CASE_INSENSITIVE_ORDER)
+                .limit(2)
+                .collect(Collectors.toUnmodifiableList()); // Immutable result
     }
 
-    // TODO - return a comma separated String of sorted fruits
+    //  - return a comma separated String of sorted fruits -- done
     // Handle null values and empty results gracefully
-    public String commaSeparatedListOfFruits() throws InvalidDataException {
-        // Implement with proper string joining and validation
-        return null;
+    public String commaSeparatedListOfFruits(List<String> fruits) throws InvalidDataException {
+        // Validate input
+        if (fruits == null) {
+            throw new InvalidDataException("Fruits list cannot be null");
+        }
+
+        // Filter invalid entries and normalize
+        List<String> validFruits = fruits.stream()
+                .filter(Objects::nonNull)
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .distinct() // Remove duplicates
+                .collect(Collectors.toList());
+
+        // Return empty string for no valid data (graceful)
+        if (validFruits.isEmpty()) {
+            return "";
+        }
+
+        // Sort case-insensitively and join with comma-space for readability
+        return validFruits.stream()
+                .sorted(String.CASE_INSENSITIVE_ORDER)
+                .collect(Collectors.joining(", "));
     }
 
-    // TODO - return a list of veggies sorted in reverse (descending) order
+    //  - return a list of veggies sorted in reverse (descending) order -- done
     // Use Comparator.reverseOrder() and handle edge cases
-    public List<String> reverseSortedVeggies() throws InvalidDataException {
-        return null;
+    public List<String> reverseSortedVeggies(List<String> veggies) throws InvalidDataException {
+        // Validate input
+        if (veggies == null) {
+            throw new InvalidDataException("Veggies list cannot be null");
+        }
+
+        // Handle empty list gracefully
+        if (veggies.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        // Filter and normalize
+        List<String> validVeggies = veggies.stream()
+                .filter(Objects::nonNull)
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .distinct() // Optional: remove duplicates
+                .collect(Collectors.toList());
+
+        // Return empty if all data was invalid
+        if (validVeggies.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        // Sort in reverse order (case-insensitive for natural sorting)
+        return validVeggies.stream()
+                .sorted(String.CASE_INSENSITIVE_ORDER.reversed())
+                .collect(Collectors.toUnmodifiableList());
     }
 
-    // TODO - return a list of veggies sorted in reverse order, all in upper case
+    //  - return a list of veggies sorted in reverse order, all in upper case -- done
     // Chain multiple stream operations with proper exception handling
-    public List<String> reverseSortedVeggiesInUpperCase() throws InvalidDataException {
-        return null;
+    public List<String> reverseSortedVeggiesInUpperCase(List<String> veggies) throws InvalidDataException {
+        // Validate input
+        if (this.veggies == null) {
+            throw new InvalidDataException("Veggies list cannot be null");
+        }
+
+        // Handle empty list gracefully
+        if (this.veggies.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        // Chain operations efficiently
+        List<String> result = this.veggies.stream()
+                .filter(Objects::nonNull)           // 1. Remove nulls
+                .map(String::trim)                  // 2. Trim whitespace
+                .filter(s -> !s.isEmpty())          // 3. Remove empty strings
+                .map(s -> s.toUpperCase(Locale.ROOT)) // 4. Convert to uppercase (locale-safe)
+                .distinct()                         // 5. Remove duplicates (optional)
+                .sorted(Comparator.reverseOrder())  // 6. Sort in reverse
+                .collect(Collectors.toList());
+
+        // Return empty if all data was filtered out
+        return result.isEmpty() ? Collections.emptyList() : result;
     }
 
     // TODO - return a list of the top 10 values in the list of random integers
     // Handle cases where list has fewer than 10 elements
     public List<Integer> topTen() throws InvalidDataException {
-        return null;
+        // Validate input
+
+        if (randomIntegers == null) {
+            throw new InvalidDataException("Random integers list cannot be null");
+        }
+
+        // Handle empty list gracefully
+        if (randomIntegers.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        // Filter nulls, sort descending, take up to 10
+        List<Integer> result = randomIntegers.stream()
+                .filter(Objects::nonNull)
+                .sorted(Comparator.reverseOrder())
+                .limit(10)
+                .collect(Collectors.toList());
+
+        // Return result (handles < 10 elements automatically)
+        return result;
     }
 
     // TODO - return a list of the top 10 unique values in the list of random integers

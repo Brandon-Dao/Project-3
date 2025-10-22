@@ -63,7 +63,7 @@ class GentlyDownTheStreamTest {
                     .collect(Collectors.toList());
 
             assertDoesNotThrow(() -> {
-                List<String> actual = stream.sortedFruitsFirstTwo();
+                List<String> actual = stream.sortedFruitsFirstTwo(stream.fruits);
                 assertThat(actual).isEqualTo(expected);
             });
         }
@@ -76,7 +76,7 @@ class GentlyDownTheStreamTest {
                     .collect(Collectors.joining(", "));
 
             assertDoesNotThrow(() -> {
-                String actual = stream.commaSeparatedListOfFruits();
+                String actual = stream.commaSeparatedListOfFruits(stream.fruits);
                 assertThat(actual).isEqualTo(expected);
             });
         }
@@ -89,7 +89,7 @@ class GentlyDownTheStreamTest {
                     .collect(Collectors.toList());
 
             assertDoesNotThrow(() -> {
-                List<String> actual = stream.reverseSortedVeggies();
+                List<String> actual = stream.reverseSortedVeggies(stream.veggies);
                 assertThat(actual).isEqualTo(expected);
             });
         }
@@ -103,7 +103,7 @@ class GentlyDownTheStreamTest {
                     .collect(Collectors.toList());
 
             assertDoesNotThrow(() -> {
-                List<String> actual = stream.reverseSortedVeggiesInUpperCase();
+                List<String> actual = stream.reverseSortedVeggiesInUpperCase(stream.veggies);
                 assertThat(actual).isEqualTo(expected);
             });
         }
