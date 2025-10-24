@@ -182,7 +182,7 @@ class GentlyDownTheStreamTest {
                 // Force null state for testing
                 nullStream.fruits = null;
                 nullStream.sortedFruits();
-            }).isInstanceOf(IllegalArgumentException.class)
+            }).isInstanceOf(InvalidDataException.class)
                     .hasMessageContaining("cannot be null");
         }
 
@@ -194,7 +194,7 @@ class GentlyDownTheStreamTest {
                 GentlyDownTheStream emptyStream = new GentlyDownTheStream();
                 emptyStream.fruits = List.of(); // Empty list
                 emptyStream.sortedFruits();
-            }).isInstanceOf(EmptyCollectionException.class)
+            }).isInstanceOf(InvalidDataException.class)
                     .hasMessageContaining("cannot be empty");
         }
 

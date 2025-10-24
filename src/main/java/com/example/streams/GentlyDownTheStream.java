@@ -160,22 +160,22 @@ public class GentlyDownTheStream {
         return result.isEmpty() ? Collections.emptyList() : result;
     }
 
-    // TODO - return a list of the top 10 values in the list of random integers
+     // - return a list of the top 10 values in the list of random integers -- done
     // Handle cases where list has fewer than 10 elements
     public List<Integer> topTen() throws InvalidDataException {
         // Validate input
 
-        if (randomIntegers == null) {
+        if (integerValues == null) {
             throw new InvalidDataException("Random integers list cannot be null");
         }
 
         // Handle empty list gracefully
-        if (randomIntegers.isEmpty()) {
+        if (integerValues.isEmpty()) {
             return Collections.emptyList();
         }
 
         // Filter nulls, sort descending, take up to 10
-        List<Integer> result = randomIntegers.stream()
+        List<Integer> result = integerValues.stream()
                 .filter(Objects::nonNull)
                 .sorted(Comparator.reverseOrder())
                 .limit(10)
@@ -185,22 +185,64 @@ public class GentlyDownTheStream {
         return result;
     }
 
-    // TODO - return a list of the top 10 unique values in the list of random integers
+    //  - return a list of the top 10 unique values in the list of random integers -- done
     // Use distinct() operation and handle empty results
     public List<Integer> topTenUnique() throws InvalidDataException {
-        return null;
+        if (integerValues == null) {
+            throw new InvalidDataException("Integer values list cannot be null");
+        }
+
+        if (integerValues.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        // Filter nulls, remove duplicates, sort descending, take top 10
+        return integerValues.stream()
+                .filter(Objects::nonNull)
+                .distinct()  // Remove duplicates
+                .sorted(Comparator.reverseOrder())
+                .limit(10)
+                .collect(Collectors.toList());
     }
 
-    // TODO - return a list of the top 10 unique values that are odd
+    // - return a list of the top 10 unique values that are odd -- done
     // Combine filtering, distinct, and limiting operations
     public List<Integer> topTenUniqueOdd() throws InvalidDataException {
-        return null;
+        if (integerValues == null) {
+            throw new InvalidDataException("Integer values list cannot be null");
+        }
+
+        if (integerValues.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        // Filter nulls, filter odds, remove duplicates, sort descending, take top 10
+        return integerValues.stream()
+                .filter(Objects::nonNull)
+                .filter(n -> n % 2 != 0)          // Keep only odd numbers
+                .distinct()                        // Remove duplicates
+                .sorted(Comparator.reverseOrder()) // Sort descending
+                .limit(10)                         // Take top 10
+                .collect(Collectors.toList());
     }
 
-    // TODO - return the average of all random numbers
+    //  - return the average of all random numbers -- done
     // Handle potential OptionalDouble and division by zero scenarios
     public Double average() throws InvalidDataException {
-        return null;
+        if (integerValues == null) {
+            throw new InvalidDataException("Integer values list cannot be null");
+        }
+
+        if (integerValues.isEmpty()) {
+            throw new InvalidDataException("Cannot calculate average of empty list");
+        }
+
+        // Filter nulls and calculate average
+        return integerValues.stream()
+                .filter(Objects::nonNull)
+                .mapToInt(Integer::intValue)  // Convert to IntStream for efficiency
+                .average()                     // Returns OptionalDouble
+                .orElseThrow(() -> new InvalidDataException("No valid values to average"));
     }
 
     // Generic method for safe collection operations
